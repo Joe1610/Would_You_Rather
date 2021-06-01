@@ -30,82 +30,107 @@ class QuestionAnswer extends Component {
   };
 
   handleUserAnswer = (choice) => {
-    const { authedUser, id } = this.props;
+    const { authedUser, id, questions, users } = this.props;
+    console.log("option one answers", questions[id].optionOne.votes);
+    console.log("option two answers", questions[id].optionTwo.votes);
     this.props
       .dispatch(handleQuestionAnswer(authedUser, id, choice))
-      .then(() => this.setState({ notAnswered: false , userAnswer: choice}));
+      .then(() => this.setState({ notAnswered: false, userAnswer: choice }));
+    console.log("user answers", users[authedUser].answers);
+    console.log("option one answers", questions[id].optionOne.votes);
+    console.log("option two answers", questions[id].optionTwo.votes);
   };
   render() {
     const { questions, id, users, authedUser } = this.props;
     const question = questions[id];
-    if(!question) return ( <Redirect to="/errornotfound" />)
+    if (!question) return <Redirect to="/errornotfound" />;
     const { userAnswer } = this.state;
-    const totalVotes = question["optionOne"].votes.length + question["optionTwo"].votes.length;
+    const totalVotes =
+      question["optionOne"].votes.length + question["optionTwo"].votes.length;
     return (
       <div style={{ width: "70%", margin: "auto" }}>
         <Card>
-          <CardActionArea>
+          {this.state.notAnswered ? (
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
-                {users[authedUser].name} asks:
+                {question.author} asks:
               </Typography>
               <div>
-                <img alt={authedUser.id} src={users[authedUser].avatarURL} />
+                <img alt={question.id} src={users[question.author].avatarURL} />
               </div>
               <Typography gutterBottom variant="h5">
                 Would you rather...
               </Typography>
               <br />
-              {this.state.notAnswered ? (
+              <div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  onClick={() => this.handleUserAnswer("optionOne")}
+                >
+                  {question.optionOne.text}
+                </Button>
+                <Typography
+                  variant="subtitle1"
+                  color="textPrimary"
+                  align="center"
+                >
+                  OR
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  onClick={() => this.handleUserAnswer("optionTwo")}
+                >
+                  {question.optionTwo.text}
+                </Button>
+              </div>
+            </CardContent>
+          ) : (
+            <CardActionArea>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {question.author} asks:
+                </Typography>
                 <div>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    onClick={() => this.handleUserAnswer("optionOne")}
-                  >
-                    {question.optionOne.text}
-                  </Button>
-                  <Typography
-                    variant="subtitle1"
-                    color="textPrimary"
-                    align="center"
-                  >
-                    OR
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    onClick={() => this.handleUserAnswer("optionTwo")}
-                  >
-                    {question.optionTwo.text}
-                  </Button>
+                  <img
+                    alt={question.id}
+                    src={users[question.author].avatarURL}
+                  />
                 </div>
-              ) : (
+                <Typography gutterBottom variant="h5">
+                  Would you rather...
+                </Typography>
+                <br />
                 <div>
-                  <h6 style={{color:"green"}}> Your answer was: {userAnswer}</h6>
+                  <h6 style={{ color: "green" }}>
+                    {" "}
+                    Your answer was: {userAnswer}
+                  </h6>
                   <Paper
-                  style={{
-                    width: "40%",
-                    margin: "auto",
-                    padding: 8,
-                    backgroundColor: "whitesmoke",
-                    color: "black",
-                  }}
-                  variant="outlined"
-                  elevation={12}>
-                    <Typography
-                      variant="subtitle1"
-                      align="center"
-                    >
+                    style={{
+                      width: "40%",
+                      margin: "auto",
+                      padding: 8,
+                      backgroundColor: "whitesmoke",
+                      color: "black",
+                    }}
+                    variant="outlined"
+                    elevation={12}
+                  >
+                    <Typography variant="subtitle1" align="center">
                       {question.optionOne.text}
                     </Typography>
-                    <br/>
+                    <br />
                     <div style={{ position: "relative" }}>
                       <span>
-                        {((question["optionOne"].votes.length * 100) /
-                          totalVotes).toFixed(2)}%
+                        {(
+                          (question["optionOne"].votes.length * 100) /
+                          totalVotes
+                        ).toFixed(2)}
+                        %
                       </span>
                       <LinearProgress
                         variant="determinate"
@@ -115,35 +140,36 @@ class QuestionAnswer extends Component {
                         }
                       />
                     </div>
-                    <br/>
-                    <Typography
-                      variant="subtitle1"
-                      align="center"
-                    >
-                      {question["optionOne"].votes.length}{" out of "}{totalVotes}{" votes"}
+                    <br />
+                    <Typography variant="subtitle1" align="center">
+                      {question["optionOne"].votes.length}
+                      {" out of "}
+                      {totalVotes}
+                      {" votes"}
                     </Typography>
                   </Paper>
                   <Paper
-                  style={{
-                    width: "40%",
-                    margin: "auto",
-                    padding: 8,
-                    backgroundColor: "whitesmoke",
-                    color: "black",
-                  }}
-                  variant="outlined"
-                  elevation={12}>
-                    <Typography
-                      variant="subtitle1"
-                      align="center"
-                    >
+                    style={{
+                      width: "40%",
+                      margin: "auto",
+                      padding: 8,
+                      backgroundColor: "whitesmoke",
+                      color: "black",
+                    }}
+                    variant="outlined"
+                    elevation={12}
+                  >
+                    <Typography variant="subtitle1" align="center">
                       {question.optionTwo.text}
                     </Typography>
-                    <br/>
+                    <br />
                     <div style={{ position: "relative" }}>
                       <span>
-                        {((question["optionTwo"].votes.length * 100) /
-                          totalVotes).toFixed(2)}%
+                        {(
+                          (question["optionTwo"].votes.length * 100) /
+                          totalVotes
+                        ).toFixed(2)}
+                        %
                       </span>
                       <LinearProgress
                         variant="determinate"
@@ -153,18 +179,18 @@ class QuestionAnswer extends Component {
                         }
                       />
                     </div>
-                    <br/>
-                    <Typography
-                      variant="subtitle1"
-                      align="center"
-                    >
-                      {question["optionTwo"].votes.length}{" out of "}{totalVotes}{" votes"}
+                    <br />
+                    <Typography variant="subtitle1" align="center">
+                      {question["optionTwo"].votes.length}
+                      {" out of "}
+                      {totalVotes}
+                      {" votes"}
                     </Typography>
                   </Paper>
                 </div>
-              )}
-            </CardContent>
-          </CardActionArea>
+              </CardContent>
+            </CardActionArea>
+          )}
         </Card>
       </div>
     );

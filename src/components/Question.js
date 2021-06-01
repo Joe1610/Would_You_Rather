@@ -55,6 +55,7 @@ const Question = props => {
                         {question.optionTwo.text}
                     </Typography>     
                 </CardContent>
+            </CardActionArea>
                 <div className= {classes.btn}>
                 <Link to={`/questions/${question.id}`}>
                     <Button  variant="contained" size="large" color="primary">
@@ -62,7 +63,6 @@ const Question = props => {
                     </Button>
                 </Link>
                 </div>
-            </CardActionArea>
         </Card>
     )
 }

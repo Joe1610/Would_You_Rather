@@ -38,7 +38,7 @@ function NavBar(props) {
           >
             <Avatar alt={authedUser.id} src={users[authedUser].avatarURL} />
           </IconButton>
-          <Typography variant="contained" className={classes.title}>
+          <Typography variant="subtitle2" className={classes.title}>
             {"Hi " + authedUser}
           </Typography>
           <Typography variant="h6" className={classes.title}>
