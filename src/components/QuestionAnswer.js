@@ -31,17 +31,12 @@ class QuestionAnswer extends Component {
 
   handleUserAnswer = (choice) => {
     const { authedUser, id, questions, users } = this.props;
-    console.log("option one answers", questions[id].optionOne.votes);
-    console.log("option two answers", questions[id].optionTwo.votes);
     this.props
       .dispatch(handleQuestionAnswer(authedUser, id, choice))
       .then(() => this.setState({ notAnswered: false, userAnswer: choice }));
-    console.log("user answers", users[authedUser].answers);
-    console.log("option one answers", questions[id].optionOne.votes);
-    console.log("option two answers", questions[id].optionTwo.votes);
   };
   render() {
-    const { questions, id, users, authedUser } = this.props;
+    const { questions, id, users } = this.props;
     const question = questions[id];
     if (!question) return <Redirect to="/errornotfound" />;
     const { userAnswer } = this.state;
